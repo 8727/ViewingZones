@@ -37,7 +37,7 @@ namespace ViewingZones
 
             string sqlzones = "SELECT ChannelId, Type, Name, X1, Y1, X2, Y2, X3, Y3, X4, Y4 FROM Zone WHERE Type = 2 or Type = 3 or Type = 4";
 
-            using (var connection = new SQLiteConnection($@"URI=file:{InstallDir}Database\bpm.db"))
+/*            using (var connection = new SQLiteConnection($@"URI=file:{InstallDir}Database\bpm.db"))
             {
                 connection.Open();
 
@@ -52,20 +52,51 @@ namespace ViewingZones
                         }
                     }
                 }
-            }
+            }*/
 
 
 
 
         }
 
-        private void search_Click(object sender, EventArgs e)
+
+
+        void search_Click(object sender, EventArgs e)
         {
-            XmlDocument xFile = new XmlDocument();
+            string sqlcar = $"SELECT CHECKTIME, CHANNEL_ID, SCREENSHOT FROM CARS WHERE GRNNUMBER LIKE \"{numberBox.Text.Replace('*', '_').ToUpper()}\"";
+
+            label1.Text = sqlcar;  
+            
+            comboBox1.Items.Clear();    
+
+            using (var connection = new SQLiteConnection($@"URI=file:{InstallDir}Database\vtvehicledb.sqlite"))
+            {
+                connection.Open();
+
+                SQLiteCommand command = new SQLiteCommand(sqlcar, connection);
+                using (SQLiteDataReader reader = command.ExecuteReader())
+                {
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            
+                            string test = DateTime.FromFileTime(reader.GetInt64(0)).ToString();
+                            comboBox1.Items.Add(test + " " + reader.GetString(1));
+                        }
+                    }
+                }
+            }
+
+
+
+
+
+
+/*            XmlDocument xFile = new XmlDocument();
             xFile.Load(InstallDir + "configmanager.dll.config");
 
-            XmlNodeList _fnames = xFile.GetElementsByTagName("FirstName");
-            label1.Text = xmlcontents;
+            XmlNodeList _fnames = xFile.GetElementsByTagName("FirstName");*/
         }
 
 
