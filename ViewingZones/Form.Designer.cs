@@ -30,8 +30,8 @@
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ui));
             this.searchNumber = new System.Windows.Forms.GroupBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.search = new System.Windows.Forms.Button();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.searchNumber.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -47,6 +47,16 @@
             this.searchNumber.TabStop = false;
             this.searchNumber.Text = "Number";
             // 
+            // search
+            // 
+            this.search.Location = new System.Drawing.Point(332, 28);
+            this.search.Name = "search";
+            this.search.Size = new System.Drawing.Size(97, 37);
+            this.search.TabIndex = 1;
+            this.search.Text = "Search";
+            this.search.UseVisualStyleBackColor = true;
+            this.search.Click += new System.EventHandler(this.search_Click);
+            // 
             // textBox1
             // 
             this.textBox1.Font = new System.Drawing.Font("Microsoft Sans Serif", 20.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
@@ -57,24 +67,16 @@
             this.textBox1.Text = "А001АА177";
             this.textBox1.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // search
-            // 
-            this.search.Location = new System.Drawing.Point(332, 28);
-            this.search.Name = "search";
-            this.search.Size = new System.Drawing.Size(97, 37);
-            this.search.TabIndex = 1;
-            this.search.Text = "Search";
-            this.search.UseVisualStyleBackColor = true;
-            // 
-            // Form1
+            // Ui
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1457, 808);
             this.Controls.Add(this.searchNumber);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.Name = "Form";
+            this.Name = "Ui";
             this.Text = "Form";
+            this.Load += new System.EventHandler(this.Ui_Load);
             this.searchNumber.ResumeLayout(false);
             this.searchNumber.PerformLayout();
             this.ResumeLayout(false);
