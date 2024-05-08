@@ -3,9 +3,7 @@ using System;
 using System.Data.SQLite;
 using System.Collections;
 using System.Windows.Forms;
-using System.Xml;
 using System.IO;
-using System.Data.SqlTypes;
 
 namespace ViewingZones
 {
@@ -36,13 +34,12 @@ namespace ViewingZones
                     }
                 }
             }
-            if (File.Exists( InstallDir + "Database\\vtsettingsdb.sqlite"))
+            if (File.Exists( InstallDir + @"Database\vtsettingsdb.sqlite"))
             {
                 string sqlChannel = "SELECT CHANNEL_ID, NAME FROM CHANNELS";
                 using (var connection = new SQLiteConnection($@"URI=file:{InstallDir}Database\vtsettingsdb.sqlite"))
                 {
                     connection.Open();
-
                     SQLiteCommand command = new SQLiteCommand(sqlChannel, connection);
                     using (SQLiteDataReader reader = command.ExecuteReader())
                     {
@@ -55,13 +52,10 @@ namespace ViewingZones
                         }
                     }
                 }
-
-
-
             }
             else
             {
-
+                MessageBox.Show($"There is no database file \n{InstallDir}Database\\vtsettingsdb.sqlite \nor it is in a different folder.", "No database file", MessageBoxButtons.OK, MessageBoxIcon.Warning) ;
             }
 
             string sqlzones = "SELECT ChannelId, Type, Name, X1, Y1, X2, Y2, X3, Y3, X4, Y4 FROM Zone WHERE Type = 2 or Type = 3 or Type = 4";
@@ -96,7 +90,7 @@ namespace ViewingZones
 
             label1.Text = sqlcar;  
             
-            comboBox1.Items.Clear();    
+            timeAndDateBox.Items.Clear();    
 
             using (var connection = new SQLiteConnection($@"URI=file:{InstallDir}Database\vtvehicledb.sqlite"))
             {
@@ -111,7 +105,7 @@ namespace ViewingZones
                         {
                             
                             string test = DateTime.FromFileTime(reader.GetInt64(0)).ToString();
-                            comboBox1.Items.Add(test + " " + reader.GetString(1));
+                            timeAndDateBox.Items.Add(test + " " + reader.GetString(1));
                         }
                     }
                 }
