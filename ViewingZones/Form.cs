@@ -4,6 +4,8 @@ using System.Data.SQLite;
 using System.Collections;
 using System.Windows.Forms;
 using System.Xml;
+using System.IO;
+using System.Data.SqlTypes;
 
 namespace ViewingZones
 {
@@ -33,6 +35,33 @@ namespace ViewingZones
                         ScreenshotDir = key.GetValue("ScreenshotDir").ToString();
                     }
                 }
+            }
+            if (File.Exists( InstallDir + "Database\\vtsettingsdb.sqlite"))
+            {
+                string sqlChannel = "SELECT CHANNEL_ID, NAME FROM CHANNELS";
+                using (var connection = new SQLiteConnection($@"URI=file:{InstallDir}Database\vtsettingsdb.sqlite"))
+                {
+                    connection.Open();
+
+                    SQLiteCommand command = new SQLiteCommand(sqlChannel, connection);
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.HasRows)
+                        {
+                            while (reader.Read())
+                            {
+                                //Channel.Add(reader.GetString(0), reader.GetStream(1));
+                            }
+                        }
+                    }
+                }
+
+
+
+            }
+            else
+            {
+
             }
 
             string sqlzones = "SELECT ChannelId, Type, Name, X1, Y1, X2, Y2, X3, Y3, X4, Y4 FROM Zone WHERE Type = 2 or Type = 3 or Type = 4";
