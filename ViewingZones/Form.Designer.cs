@@ -30,22 +30,44 @@
         {
             System.Windows.Forms.GroupBox images;
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Ui));
+            this.imagesBox = new System.Windows.Forms.ComboBox();
             this.searchNumber = new System.Windows.Forms.GroupBox();
             this.search = new System.Windows.Forms.Button();
             this.numberBox = new System.Windows.Forms.TextBox();
-            this.timeAndDateBox = new System.Windows.Forms.ComboBox();
+            this.dateAndTimeBox = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.timeAndDate = new System.Windows.Forms.GroupBox();
-            this.imagesBox = new System.Windows.Forms.ComboBox();
+            this.datetime = new System.Windows.Forms.GroupBox();
             this.imageBox = new System.Windows.Forms.PictureBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.save = new System.Windows.Forms.Button();
+            this.saveAll = new System.Windows.Forms.Button();
             images = new System.Windows.Forms.GroupBox();
-            this.searchNumber.SuspendLayout();
-            this.timeAndDate.SuspendLayout();
             images.SuspendLayout();
+            this.searchNumber.SuspendLayout();
+            this.datetime.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.imageBox)).BeginInit();
             this.SuspendLayout();
+            // 
+            // images
+            // 
+            images.Controls.Add(this.imagesBox);
+            images.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            images.ForeColor = System.Drawing.Color.White;
+            images.Location = new System.Drawing.Point(725, 2);
+            images.Name = "images";
+            images.Size = new System.Drawing.Size(344, 79);
+            images.TabIndex = 4;
+            images.TabStop = false;
+            images.Text = "Images";
+            // 
+            // imagesBox
+            // 
+            this.imagesBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.imagesBox.FormattingEnabled = true;
+            this.imagesBox.Location = new System.Drawing.Point(14, 31);
+            this.imagesBox.Name = "imagesBox";
+            this.imagesBox.Size = new System.Drawing.Size(315, 28);
+            this.imagesBox.TabIndex = 1;
+            this.imagesBox.SelectedIndexChanged += new System.EventHandler(this.imagesBox_SelectedIndexChanged);
             // 
             // searchNumber
             // 
@@ -81,14 +103,15 @@
             this.numberBox.Text = "А001АА177";
             this.numberBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // timeAndDateBox
+            // dateAndTimeBox
             // 
-            this.timeAndDateBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.timeAndDateBox.FormattingEnabled = true;
-            this.timeAndDateBox.Location = new System.Drawing.Point(14, 31);
-            this.timeAndDateBox.Name = "timeAndDateBox";
-            this.timeAndDateBox.Size = new System.Drawing.Size(315, 28);
-            this.timeAndDateBox.TabIndex = 1;
+            this.dateAndTimeBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.dateAndTimeBox.FormattingEnabled = true;
+            this.dateAndTimeBox.Location = new System.Drawing.Point(14, 31);
+            this.dateAndTimeBox.Name = "dateAndTimeBox";
+            this.dateAndTimeBox.Size = new System.Drawing.Size(315, 28);
+            this.dateAndTimeBox.TabIndex = 1;
+            this.dateAndTimeBox.SelectedIndexChanged += new System.EventHandler(this.dateAndTimeBox_SelectedIndexChanged);
             // 
             // label1
             // 
@@ -100,38 +123,17 @@
             this.label1.TabIndex = 2;
             this.label1.Text = "label1";
             // 
-            // timeAndDate
+            // datetime
             // 
-            this.timeAndDate.Controls.Add(this.timeAndDateBox);
-            this.timeAndDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.timeAndDate.ForeColor = System.Drawing.Color.White;
-            this.timeAndDate.Location = new System.Drawing.Point(363, 2);
-            this.timeAndDate.Name = "timeAndDate";
-            this.timeAndDate.Size = new System.Drawing.Size(344, 79);
-            this.timeAndDate.TabIndex = 3;
-            this.timeAndDate.TabStop = false;
-            this.timeAndDate.Text = "Time and Date";
-            // 
-            // images
-            // 
-            images.Controls.Add(this.imagesBox);
-            images.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            images.ForeColor = System.Drawing.Color.White;
-            images.Location = new System.Drawing.Point(725, 2);
-            images.Name = "images";
-            images.Size = new System.Drawing.Size(344, 79);
-            images.TabIndex = 4;
-            images.TabStop = false;
-            images.Text = "Images";
-            // 
-            // imagesBox
-            // 
-            this.imagesBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.imagesBox.FormattingEnabled = true;
-            this.imagesBox.Location = new System.Drawing.Point(14, 31);
-            this.imagesBox.Name = "imagesBox";
-            this.imagesBox.Size = new System.Drawing.Size(315, 28);
-            this.imagesBox.TabIndex = 1;
+            this.datetime.Controls.Add(this.dateAndTimeBox);
+            this.datetime.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.datetime.ForeColor = System.Drawing.Color.White;
+            this.datetime.Location = new System.Drawing.Point(363, 2);
+            this.datetime.Name = "datetime";
+            this.datetime.Size = new System.Drawing.Size(344, 79);
+            this.datetime.TabIndex = 3;
+            this.datetime.TabStop = false;
+            this.datetime.Text = "Date and Time";
             // 
             // imageBox
             // 
@@ -145,27 +147,29 @@
             this.imageBox.TabIndex = 5;
             this.imageBox.TabStop = false;
             // 
-            // button1
+            // save
             // 
-            this.button1.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button1.ForeColor = System.Drawing.Color.Black;
-            this.button1.Location = new System.Drawing.Point(1084, 12);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(95, 69);
-            this.button1.TabIndex = 6;
-            this.button1.Text = "Save";
-            this.button1.UseVisualStyleBackColor = true;
+            this.save.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.save.ForeColor = System.Drawing.Color.Black;
+            this.save.Location = new System.Drawing.Point(1084, 12);
+            this.save.Name = "save";
+            this.save.Size = new System.Drawing.Size(95, 69);
+            this.save.TabIndex = 6;
+            this.save.Text = "Save";
+            this.save.UseVisualStyleBackColor = true;
+            this.save.Click += new System.EventHandler(this.save_Click);
             // 
-            // button2
+            // saveAll
             // 
-            this.button2.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.button2.ForeColor = System.Drawing.Color.Black;
-            this.button2.Location = new System.Drawing.Point(1195, 11);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(95, 69);
-            this.button2.TabIndex = 7;
-            this.button2.Text = "Save All";
-            this.button2.UseVisualStyleBackColor = true;
+            this.saveAll.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.saveAll.ForeColor = System.Drawing.Color.Black;
+            this.saveAll.Location = new System.Drawing.Point(1195, 11);
+            this.saveAll.Name = "saveAll";
+            this.saveAll.Size = new System.Drawing.Size(95, 69);
+            this.saveAll.TabIndex = 7;
+            this.saveAll.Text = "Save All";
+            this.saveAll.UseVisualStyleBackColor = true;
+            this.saveAll.Click += new System.EventHandler(this.saveAll_Click);
             // 
             // Ui
             // 
@@ -173,11 +177,11 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.ControlDarkDark;
             this.ClientSize = new System.Drawing.Size(1299, 815);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.saveAll);
+            this.Controls.Add(this.save);
             this.Controls.Add(this.imageBox);
             this.Controls.Add(images);
-            this.Controls.Add(this.timeAndDate);
+            this.Controls.Add(this.datetime);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.searchNumber);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -185,10 +189,10 @@
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form";
             this.Load += new System.EventHandler(this.Ui_Load);
+            images.ResumeLayout(false);
             this.searchNumber.ResumeLayout(false);
             this.searchNumber.PerformLayout();
-            this.timeAndDate.ResumeLayout(false);
-            images.ResumeLayout(false);
+            this.datetime.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.imageBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -199,13 +203,13 @@
         private System.Windows.Forms.TextBox numberBox;
         private System.Windows.Forms.GroupBox searchNumber;
         private System.Windows.Forms.Button search;
-        private System.Windows.Forms.ComboBox timeAndDateBox;
+        private System.Windows.Forms.ComboBox dateAndTimeBox;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.GroupBox timeAndDate;
+        private System.Windows.Forms.GroupBox datetime;
         private System.Windows.Forms.ComboBox imagesBox;
         private System.Windows.Forms.PictureBox imageBox;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button save;
+        private System.Windows.Forms.Button saveAll;
     }
 }
 
