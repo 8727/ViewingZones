@@ -21,8 +21,6 @@ namespace ViewingZones
         {
             InitializeComponent();
         }
-        string[] timeCar = {"ObjectImage", "ObjectBeginImage", "ObjectEndImage" };
-
 
         class CarFilePoint
         {
@@ -31,6 +29,12 @@ namespace ViewingZones
             public Int16 y;
             public Int16 width;
             public Int16 height;
+        }
+
+        class Carfile
+        {
+            public string channelId;
+            public string patchfile;
         }
 
         class ChannelZone
@@ -56,10 +60,20 @@ namespace ViewingZones
 
         Hashtable channel = new Hashtable(); // камеры на съемнике 
         Hashtable cars = new Hashtable(); // найденые проезды
-        Hashtable imagesCarcs = new Hashtable(); // найденые картинки в проезде
+        Hashtable imagesCarcs = new Hashtable(); // найденые картинки проезда
+        Hashtable imagesNames = new Hashtable(); // имена найденых картинок проезда
 
         string installDir = @"C:\Vocord\Vocord.Traffic Crossroads\";
         string screenshotDir = @"E:\Screenshots";
+
+        void HashImagesNames()
+        {
+            imagesNames.Add("DetectionBeginning", "Detection Beginning");
+            imagesNames.Add("ObjectImage", "Object Image");
+            imagesNames.Add("ObjectBeginImage", "Object Begin Image");
+            imagesNames.Add("ObjectEndImage", "Object End Image");
+
+        }
 
         void Ui_Load(object sender, EventArgs e)
         {
@@ -105,6 +119,7 @@ namespace ViewingZones
             {
                 MessageBox.Show($"There is no database file \n{installDir}Database\\vtsettingsdb.sqlite \nor it is in a different folder.", "No database file", MessageBoxButtons.OK, MessageBoxIcon.Warning) ;
             }
+            HashImagesNames();
         }
 
         void LoadZone(string id, string name)
@@ -152,10 +167,12 @@ namespace ViewingZones
             if (imagesBox.Items.Count > 0)
             {
                 CarFilePoint imgCar = (CarFilePoint)imagesCarcs[imagesBox.SelectedItem.ToString()];
+                Carfile carfile = (Carfile)cars[carsBox.SelectedItem.ToString()];
 
                 if (imgCar.file != "")
                 {
-                    imageBox.Image = Image.FromFile("C:\\vocord\\Vocord.Traffic Crossroads\\11394 09-41-04 @257068@\\" + imgCar.file);
+                    imageBox.Image = Image.FromFile(screenshotDir + "\\" + carfile.patchfile + imgCar.file);
+
                     Graphics imageBoximg = Graphics.FromImage(imageBox.Image);
                     Pen pen = new Pen(Color.Red, 5);
                     imageBoximg.DrawRectangle(pen, (imgCar.x - imgCar.width / 2), (imgCar.y - imgCar.height / 2), imgCar.width, imgCar.height);
@@ -163,7 +180,7 @@ namespace ViewingZones
 
                     var color = Color.LightGray;
 
-                    ChannelNameZone channelZones = (ChannelNameZone)channel["289D333B-6E88-404E-B492-E4AA89183C81"];
+                    ChannelNameZone channelZones = (ChannelNameZone)channel[carfile.channelId];
 
                     label1.Text = channelZones.count.ToString();
 
@@ -199,12 +216,14 @@ namespace ViewingZones
             {
                 imagesBox.Items.Clear();
                 imagesCarcs.Clear();
-                string[] data = (string[])cars[carsBox.SelectedItem.ToString()];
 
-                //dataXmlFile.Load(screenshotDir + "\\" + data[1] + "data.xml");
-                dataXmlFile.Load("C:\\vocord\\Vocord.Traffic Crossroads\\11394 09-41-04 @257068@\\Data.xml");
+                Carfile carfile = (Carfile)cars[carsBox.SelectedItem.ToString()];
 
-                foreach (string nameImages in timeCar)
+                dataXmlFile.Load(screenshotDir + "\\" + carfile.patchfile + "Data.xml");
+                label1.Text = screenshotDir + "\\" + carfile.patchfile + "Data.xml";
+
+                ICollection keys = imagesNames.Keys;
+                foreach (String nameImages in keys)
                 {
                     XmlNodeList nodeList = dataXmlFile.GetElementsByTagName(nameImages);
                     if (nodeList != null)
@@ -212,19 +231,26 @@ namespace ViewingZones
                         CarFilePoint imagesXml = new CarFilePoint();
                         foreach (XmlNode xnode in nodeList)
                         {
+                            bool Flags = false;
                             foreach (XmlNode vavueNode in xnode.ChildNodes)
-                            {
-                                if (vavueNode.Name == "Image") { imagesXml.file = vavueNode.InnerText; }
-                                if (vavueNode.Name == "X") { imagesXml.x = Int16.Parse(vavueNode.InnerText); }
-                                if (vavueNode.Name == "Y") { imagesXml.y = Int16.Parse(vavueNode.InnerText); }
-                                if (vavueNode.Name == "Width") { imagesXml.width = Int16.Parse(vavueNode.InnerText); }
-                                if (vavueNode.Name == "Height") { imagesXml.height = Int16.Parse(vavueNode.InnerText); }
+                            {  
+
+                                //if (vavueNode.Name == "Description" & vavueNode.InnerText != "") { Flags = true; }
+                                if (vavueNode.Name == "Type" & vavueNode.InnerText == "selected_registration_number") { Flags = true; }
+                                if (Flags == true)
+                                {
+                                    if (vavueNode.Name == "Image") { imagesXml.file = vavueNode.InnerText; }
+                                    if (vavueNode.Name == "X") { imagesXml.x = Int16.Parse(vavueNode.InnerText); }
+                                    if (vavueNode.Name == "Y") { imagesXml.y = Int16.Parse(vavueNode.InnerText); }
+                                    if (vavueNode.Name == "Width") { imagesXml.width = Int16.Parse(vavueNode.InnerText); }
+                                    if (vavueNode.Name == "Height") { imagesXml.height = Int16.Parse(vavueNode.InnerText); }
+                                }
                             }
                         }
                         if (imagesXml.file != "")
                         {
-                            imagesBox.Items.Add(nameImages);
-                            imagesCarcs.Add(nameImages, imagesXml);
+                            imagesBox.Items.Add(imagesNames[nameImages]);
+                            imagesCarcs.Add(imagesNames[nameImages], imagesXml);
                         }
                     }
                 }
@@ -266,11 +292,13 @@ namespace ViewingZones
                             string datetime;
                             while (reader.Read())
                             {
+                                Carfile carfile = new Carfile();
                                 ChannelNameZone channelName = (ChannelNameZone)channel[reader.GetString(1)];
                                 datetime = DateTime.FromFileTime(reader.GetInt64(0)).ToString() + " --- " + channelName.channelName;
+                                carfile.channelId = reader.GetString(1);
+                                carfile.patchfile = reader.GetString(2).Remove(reader.GetString(2).LastIndexOf("\\") + 1);
                                 carsBox.Items.Add(datetime);
-                                string[] date = { reader.GetString(1), reader.GetString(2).Remove(reader.GetString(2).LastIndexOf("\\") + 1) };
-                                cars.Add(datetime, date);
+                                cars.Add(datetime, carfile);
                             }
                         }
                     }
