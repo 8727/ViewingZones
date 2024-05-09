@@ -34,7 +34,7 @@
             this.searchNumber = new System.Windows.Forms.GroupBox();
             this.search = new System.Windows.Forms.Button();
             this.numberBox = new System.Windows.Forms.TextBox();
-            this.dateAndTimeBox = new System.Windows.Forms.ComboBox();
+            this.carsBox = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.datetime = new System.Windows.Forms.GroupBox();
             this.imageBox = new System.Windows.Forms.PictureBox();
@@ -100,24 +100,24 @@
             this.numberBox.Name = "numberBox";
             this.numberBox.Size = new System.Drawing.Size(195, 38);
             this.numberBox.TabIndex = 0;
-            this.numberBox.Text = "А001АА177";
+            this.numberBox.Text = "Е320КС19";
             this.numberBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
-            // dateAndTimeBox
+            // carsBox
             // 
-            this.dateAndTimeBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.dateAndTimeBox.FormattingEnabled = true;
-            this.dateAndTimeBox.Location = new System.Drawing.Point(14, 31);
-            this.dateAndTimeBox.Name = "dateAndTimeBox";
-            this.dateAndTimeBox.Size = new System.Drawing.Size(315, 28);
-            this.dateAndTimeBox.TabIndex = 1;
-            this.dateAndTimeBox.SelectedIndexChanged += new System.EventHandler(this.dateAndTimeBox_SelectedIndexChanged);
+            this.carsBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.carsBox.FormattingEnabled = true;
+            this.carsBox.Location = new System.Drawing.Point(14, 31);
+            this.carsBox.Name = "carsBox";
+            this.carsBox.Size = new System.Drawing.Size(315, 28);
+            this.carsBox.TabIndex = 1;
+            this.carsBox.SelectedIndexChanged += new System.EventHandler(this.dateAndTimeBox_SelectedIndexChanged);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(123, 219);
+            this.label1.Location = new System.Drawing.Point(20, 105);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(85, 29);
             this.label1.TabIndex = 2;
@@ -125,7 +125,7 @@
             // 
             // datetime
             // 
-            this.datetime.Controls.Add(this.dateAndTimeBox);
+            this.datetime.Controls.Add(this.carsBox);
             this.datetime.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.datetime.ForeColor = System.Drawing.Color.White;
             this.datetime.Location = new System.Drawing.Point(363, 2);
@@ -144,6 +144,7 @@
             this.imageBox.Location = new System.Drawing.Point(10, 87);
             this.imageBox.Name = "imageBox";
             this.imageBox.Size = new System.Drawing.Size(1280, 720);
+            this.imageBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.imageBox.TabIndex = 5;
             this.imageBox.TabStop = false;
             // 
@@ -179,12 +180,13 @@
             this.ClientSize = new System.Drawing.Size(1299, 815);
             this.Controls.Add(this.saveAll);
             this.Controls.Add(this.save);
-            this.Controls.Add(this.imageBox);
             this.Controls.Add(images);
             this.Controls.Add(this.datetime);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.searchNumber);
+            this.Controls.Add(this.imageBox);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.KeyPreview = true;
             this.Name = "Ui";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Form";
@@ -203,7 +205,7 @@
         private System.Windows.Forms.TextBox numberBox;
         private System.Windows.Forms.GroupBox searchNumber;
         private System.Windows.Forms.Button search;
-        private System.Windows.Forms.ComboBox dateAndTimeBox;
+        private System.Windows.Forms.ComboBox carsBox;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.GroupBox datetime;
         private System.Windows.Forms.ComboBox imagesBox;
