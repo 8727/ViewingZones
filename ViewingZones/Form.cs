@@ -1,16 +1,13 @@
 ﻿using Microsoft.Win32;
+using Microsoft.WindowsAPICodePack.Dialogs;
 using System;
 using System.Data.SQLite;
 using System.Collections;
 using System.Windows.Forms;
 using System.IO;
 using System.Xml;
-using System.Xml.Linq;
 using System.Drawing;
-using System.Reflection;
 using System.Drawing.Imaging;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using System.Runtime.Remoting.Messaging;
 
 namespace ViewingZones
 {
@@ -60,18 +57,20 @@ namespace ViewingZones
 
         Hashtable channel = new Hashtable(); // камеры на съемнике 
         Hashtable cars = new Hashtable(); // найденые проезды
-        Hashtable imagesCarcs = new Hashtable(); // найденые картинки проезда
-        Hashtable imagesNames = new Hashtable(); // имена найденых картинок проезда
+        Hashtable imagesCar = new Hashtable(); // найденые картинки проезда
+        Hashtable imageNames = new Hashtable(); // имена найденых картинок проезда
+
+        CommonOpenFileDialog dialog = new CommonOpenFileDialog();
 
         string installDir = @"C:\Vocord\Vocord.Traffic Crossroads\";
         string screenshotDir = @"E:\Screenshots";
 
         void HashImagesNames()
         {
-            imagesNames.Add("DetectionBeginning", "Detection Beginning");
-            imagesNames.Add("ObjectImage", "Object Image");
-            imagesNames.Add("ObjectBeginImage", "Object Begin Image");
-            imagesNames.Add("ObjectEndImage", "Object End Image");
+            imageNames.Add("DetectionBeginning", "Detection Beginning");
+            imageNames.Add("ObjectImage", "Object Image");
+            imageNames.Add("ObjectBeginImage", "Object Begin Image");
+            imageNames.Add("ObjectEndImage", "Object End Image");
 
         }
 
@@ -166,8 +165,8 @@ namespace ViewingZones
         {
             if (imagesBox.Items.Count > 0)
             {
-                CarFilePoint imgCar = (CarFilePoint)imagesCarcs[imagesBox.SelectedItem.ToString()];
                 Carfile carfile = (Carfile)cars[carsBox.SelectedItem.ToString()];
+                CarFilePoint imgCar = (CarFilePoint)imagesCar[imagesBox.SelectedItem.ToString()];
 
                 if (imgCar.file != "")
                 {
@@ -181,8 +180,6 @@ namespace ViewingZones
                     var color = Color.LightGray;
 
                     ChannelNameZone channelZones = (ChannelNameZone)channel[carfile.channelId];
-
-                    label1.Text = channelZones.count.ToString();
 
                     for (Int16 indexZone = 0; indexZone < channelZones.count; indexZone++)
                     {
@@ -215,14 +212,13 @@ namespace ViewingZones
             if (carsBox.Items.Count > 0)
             {
                 imagesBox.Items.Clear();
-                imagesCarcs.Clear();
+                imagesCar.Clear();
 
                 Carfile carfile = (Carfile)cars[carsBox.SelectedItem.ToString()];
 
                 dataXmlFile.Load(screenshotDir + "\\" + carfile.patchfile + "Data.xml");
-                label1.Text = screenshotDir + "\\" + carfile.patchfile + "Data.xml";
 
-                ICollection keys = imagesNames.Keys;
+                ICollection keys = imageNames.Keys;
                 foreach (String nameImages in keys)
                 {
                     XmlNodeList nodeList = dataXmlFile.GetElementsByTagName(nameImages);
@@ -235,7 +231,7 @@ namespace ViewingZones
                             foreach (XmlNode vavueNode in xnode.ChildNodes)
                             {  
 
-                                //if (vavueNode.Name == "Description" & vavueNode.InnerText != "") { Flags = true; }
+                                if (vavueNode.Name == "Description" & vavueNode.InnerText != "") { Flags = true; }
                                 if (vavueNode.Name == "Type" & vavueNode.InnerText == "selected_registration_number") { Flags = true; }
                                 if (Flags == true)
                                 {
@@ -249,19 +245,17 @@ namespace ViewingZones
                         }
                         if (imagesXml.file != "")
                         {
-                            imagesBox.Items.Add(imagesNames[nameImages]);
-                            imagesCarcs.Add(imagesNames[nameImages], imagesXml);
+                            imagesBox.Items.Add(imageNames[nameImages]);
+                            imagesCar.Add(imageNames[nameImages], imagesXml);
                         }
                     }
                 }
                 if (imagesBox.Items.Count > 0)
                 {
                     imagesBox.SelectedIndex = 0;
+                    save.Enabled = true;
+                    saveAll.Enabled = true;
                     drawingPolygons();
-                }
-                else
-                {
-
                 }
             }
         }
@@ -275,6 +269,8 @@ namespace ViewingZones
             imagesBox.Enabled = false;
             carsBox.Text = string.Empty;
             imagesBox.Text = string.Empty;
+            save.Enabled = false;
+            saveAll.Enabled = false;
 
             if (File.Exists(installDir + @"Database\vtvehicledb.sqlite"))
             {
@@ -329,12 +325,71 @@ namespace ViewingZones
 
         private void save_Click(object sender, EventArgs e)
         {
-            imageBox.Image.Save("test.jpg", ImageFormat.Jpeg);
+            dialog.InitialDirectory = Application.StartupPath.ToString();
+            dialog.AllowNonFileSystemItems = false;
+            dialog.IsFolderPicker = true;
+            dialog.Multiselect = false;
+
+            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                imageBox.Image.Save(carsBox.SelectedItem.ToString().Replace(':', '.') + " --- " + numberBox.Text + " --- " + imagesBox.SelectedItem.ToString() + ".jpg", ImageFormat.Jpeg);
+            }
+
         }
 
         private void saveAll_Click(object sender, EventArgs e)
         {
+            dialog.InitialDirectory = Application.StartupPath.ToString();
+            dialog.AllowNonFileSystemItems = false;
+            dialog.IsFolderPicker = true;
+            dialog.Multiselect = false;
 
+            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+            {
+                string fileName = carsBox.SelectedItem.ToString().Replace(':', '.') + " --- " + numberBox.Text + " --- ";
+                Carfile carfile = (Carfile)cars[carsBox.SelectedItem.ToString()];
+                ICollection keys = imageNames.Keys;
+                foreach (String key in keys)
+                {
+                    CarFilePoint imgCar = (CarFilePoint)imagesCar[imageNames[key]];
+                    if (imgCar.file != "")
+                    {
+                        imageBox.Image = Image.FromFile(screenshotDir + "\\" + carfile.patchfile + imgCar.file);
+
+                        Graphics imageBoximg = Graphics.FromImage(imageBox.Image);
+                        Pen pen = new Pen(Color.Red, 5);
+                        imageBoximg.DrawRectangle(pen, (imgCar.x - imgCar.width / 2), (imgCar.y - imgCar.height / 2), imgCar.width, imgCar.height);
+                        imageBoximg.DrawEllipse(pen, imgCar.x, imgCar.y, 5, 5);
+
+                        var color = Color.LightGray;
+
+                        ChannelNameZone channelZones = (ChannelNameZone)channel[carfile.channelId];
+
+                        for (Int16 indexZone = 0; indexZone < channelZones.count; indexZone++)
+                        {
+                            if (channelZones.zones[indexZone].type == 0) { color = Color.Green; } // Зона поиска встречного движения
+                            if (channelZones.zones[indexZone].type == 2) { color = Color.SkyBlue; } // Зона до стоп-линии
+                            if (channelZones.zones[indexZone].type == 3) { color = Color.Blue; } // Зона после стоп-линии
+                            if (channelZones.zones[indexZone].type == 4) { color = Color.Red; } // Зона проезда перекрестка на красный свет
+                            if (channelZones.zones[indexZone].type == 10) { color = Color.Pink; } // Зона распознавания номеров
+
+
+                            Point point1 = new Point(channelZones.zones[indexZone].x1, channelZones.zones[indexZone].y1);
+                            Point point2 = new Point(channelZones.zones[indexZone].x2, channelZones.zones[indexZone].y2);
+                            Point point3 = new Point(channelZones.zones[indexZone].x3, channelZones.zones[indexZone].y3);
+                            Point point4 = new Point(channelZones.zones[indexZone].x4, channelZones.zones[indexZone].y4);
+                            Point[] curvePoints = { point1, point2, point3, point4 };
+                            pen = new Pen(color, 2);
+                            SolidBrush brush = new SolidBrush(Color.FromArgb(50, color));
+                            imageBoximg.FillPolygon(brush, curvePoints);
+                            imageBoximg.DrawPolygon(pen, curvePoints);
+                        }
+                        imageBoximg.Dispose();
+                        imageBox.Refresh();
+                    }
+                    imageBox.Image.Save(fileName + imageNames[key] + ".jpg", ImageFormat.Jpeg);
+                }
+            }
         }
 
         private void Ui_KeyDown(object sender, KeyEventArgs e)

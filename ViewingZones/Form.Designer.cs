@@ -35,7 +35,6 @@
             this.search = new System.Windows.Forms.Button();
             this.numberBox = new System.Windows.Forms.TextBox();
             this.carsBox = new System.Windows.Forms.ComboBox();
-            this.label1 = new System.Windows.Forms.Label();
             this.datetime = new System.Windows.Forms.GroupBox();
             this.imageBox = new System.Windows.Forms.PictureBox();
             this.save = new System.Windows.Forms.Button();
@@ -113,16 +112,6 @@
             this.carsBox.TabIndex = 1;
             this.carsBox.SelectedIndexChanged += new System.EventHandler(this.dateAndTimeBox_SelectedIndexChanged);
             // 
-            // label1
-            // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(20, 105);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(85, 29);
-            this.label1.TabIndex = 2;
-            this.label1.Text = "label1";
-            // 
             // datetime
             // 
             this.datetime.Controls.Add(this.carsBox);
@@ -182,14 +171,13 @@
             this.Controls.Add(this.save);
             this.Controls.Add(images);
             this.Controls.Add(this.datetime);
-            this.Controls.Add(this.label1);
             this.Controls.Add(this.searchNumber);
             this.Controls.Add(this.imageBox);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.KeyPreview = true;
             this.Name = "Ui";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Form";
+            this.Text = "ViewingZones";
             this.Load += new System.EventHandler(this.Ui_Load);
             images.ResumeLayout(false);
             this.searchNumber.ResumeLayout(false);
@@ -197,7 +185,6 @@
             this.datetime.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.imageBox)).EndInit();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
@@ -206,7 +193,6 @@
         private System.Windows.Forms.GroupBox searchNumber;
         private System.Windows.Forms.Button search;
         private System.Windows.Forms.ComboBox carsBox;
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.GroupBox datetime;
         private System.Windows.Forms.ComboBox imagesBox;
         private System.Windows.Forms.PictureBox imageBox;
