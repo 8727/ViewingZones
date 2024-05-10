@@ -222,46 +222,53 @@ namespace ViewingZones
 
                 Carfile carfile = (Carfile)cars[carsBox.SelectedItem.ToString()];
 
-                dataXmlFile.Load(screenshotDir + "\\" + carfile.patchfile + "Data.xml");
-
-                ICollection keys = imageNames.Keys;
-                foreach (String nameImages in keys)
+                if (File.Exists(screenshotDir + "\\" + carfile.patchfile + "Data.xml"))
                 {
-                    XmlNodeList nodeList = dataXmlFile.GetElementsByTagName(nameImages);
-                    if (nodeList != null)
-                    {
-                        CarFilePoint imagesXml = new CarFilePoint();
-                        foreach (XmlNode xnode in nodeList)
-                        {
-                            bool Flags = false;
-                            foreach (XmlNode vavueNode in xnode.ChildNodes)
-                            {  
+                    dataXmlFile.Load(screenshotDir + "\\" + carfile.patchfile + "Data.xml");
 
-                                if (vavueNode.Name == "Description" & vavueNode.InnerText != "") { Flags = true; }
-                                if (vavueNode.Name == "Type" & vavueNode.InnerText == "selected_registration_number") { Flags = true; }
-                                if (Flags == true)
+                    ICollection keys = imageNames.Keys;
+                    foreach (String nameImages in keys)
+                    {
+                        XmlNodeList nodeList = dataXmlFile.GetElementsByTagName(nameImages);
+                        if (nodeList != null)
+                        {
+                            CarFilePoint imagesXml = new CarFilePoint();
+                            foreach (XmlNode xnode in nodeList)
+                            {
+                                bool Flags = false;
+                                foreach (XmlNode vavueNode in xnode.ChildNodes)
                                 {
-                                    if (vavueNode.Name == "Image") { imagesXml.file = vavueNode.InnerText; }
-                                    if (vavueNode.Name == "X") { imagesXml.x = Int16.Parse(vavueNode.InnerText); }
-                                    if (vavueNode.Name == "Y") { imagesXml.y = Int16.Parse(vavueNode.InnerText); }
-                                    if (vavueNode.Name == "Width") { imagesXml.width = Int16.Parse(vavueNode.InnerText); }
-                                    if (vavueNode.Name == "Height") { imagesXml.height = Int16.Parse(vavueNode.InnerText); }
+
+                                    if (vavueNode.Name == "Description" & vavueNode.InnerText != "") { Flags = true; }
+                                    if (vavueNode.Name == "Type" & vavueNode.InnerText == "selected_registration_number") { Flags = true; }
+                                    if (Flags == true)
+                                    {
+                                        if (vavueNode.Name == "Image") { imagesXml.file = vavueNode.InnerText; }
+                                        if (vavueNode.Name == "X") { imagesXml.x = Int16.Parse(vavueNode.InnerText); }
+                                        if (vavueNode.Name == "Y") { imagesXml.y = Int16.Parse(vavueNode.InnerText); }
+                                        if (vavueNode.Name == "Width") { imagesXml.width = Int16.Parse(vavueNode.InnerText); }
+                                        if (vavueNode.Name == "Height") { imagesXml.height = Int16.Parse(vavueNode.InnerText); }
+                                    }
                                 }
                             }
-                        }
-                        if (imagesXml.file != "")
-                        {
-                            imagesBox.Items.Add(imageNames[nameImages]);
-                            imagesCar.Add(imageNames[nameImages], imagesXml);
+                            if (imagesXml.file != "")
+                            {
+                                imagesBox.Items.Add(imageNames[nameImages]);
+                                imagesCar.Add(imageNames[nameImages], imagesXml);
+                            }
                         }
                     }
+                    if (imagesBox.Items.Count > 0)
+                    {
+                        imagesBox.SelectedIndex = 0;
+                        save.Enabled = true;
+                        saveAll.Enabled = true;
+                        drawingPolygons();
+                    }
                 }
-                if (imagesBox.Items.Count > 0)
+                else
                 {
-                    imagesBox.SelectedIndex = 0;
-                    save.Enabled = true;
-                    saveAll.Enabled = true;
-                    drawingPolygons();
+                    MessageBox.Show($"There is a record with number {numberBox.Text} in the database, but there is no Data.xml file on the path \n{screenshotDir + "\\" + carfile.patchfile} Data.xml", "No file", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
         }
