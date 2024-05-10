@@ -60,11 +60,11 @@
             // 
             // imagesBox
             // 
-            this.imagesBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.imagesBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.imagesBox.FormattingEnabled = true;
             this.imagesBox.Location = new System.Drawing.Point(14, 31);
             this.imagesBox.Name = "imagesBox";
-            this.imagesBox.Size = new System.Drawing.Size(315, 28);
+            this.imagesBox.Size = new System.Drawing.Size(315, 32);
             this.imagesBox.TabIndex = 1;
             this.imagesBox.SelectedIndexChanged += new System.EventHandler(this.imagesBox_SelectedIndexChanged);
             // 
@@ -83,10 +83,11 @@
             // 
             // search
             // 
+            this.search.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.search.ForeColor = System.Drawing.Color.Black;
-            this.search.Location = new System.Drawing.Point(230, 28);
+            this.search.Location = new System.Drawing.Point(216, 20);
             this.search.Name = "search";
-            this.search.Size = new System.Drawing.Size(87, 37);
+            this.search.Size = new System.Drawing.Size(113, 50);
             this.search.TabIndex = 1;
             this.search.Text = "Search";
             this.search.UseVisualStyleBackColor = true;
@@ -104,11 +105,11 @@
             // 
             // carsBox
             // 
-            this.carsBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.carsBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.carsBox.FormattingEnabled = true;
             this.carsBox.Location = new System.Drawing.Point(14, 31);
             this.carsBox.Name = "carsBox";
-            this.carsBox.Size = new System.Drawing.Size(315, 28);
+            this.carsBox.Size = new System.Drawing.Size(315, 32);
             this.carsBox.TabIndex = 1;
             this.carsBox.SelectedIndexChanged += new System.EventHandler(this.dateAndTimeBox_SelectedIndexChanged);
             // 
@@ -141,7 +142,7 @@
             // 
             // save
             // 
-            this.save.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.save.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.save.ForeColor = System.Drawing.Color.Black;
             this.save.Location = new System.Drawing.Point(1084, 12);
             this.save.Name = "save";
@@ -153,7 +154,7 @@
             // 
             // saveAll
             // 
-            this.saveAll.Font = new System.Drawing.Font("Microsoft Sans Serif", 14.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.saveAll.Font = new System.Drawing.Font("Microsoft Sans Serif", 18F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.saveAll.ForeColor = System.Drawing.Color.Black;
             this.saveAll.Location = new System.Drawing.Point(1195, 11);
             this.saveAll.Name = "saveAll";

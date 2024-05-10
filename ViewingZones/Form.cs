@@ -170,38 +170,44 @@ namespace ViewingZones
 
                 if (imgCar.file != "")
                 {
-                    imageBox.Image = Image.FromFile(screenshotDir + "\\" + carfile.patchfile + imgCar.file);
+                    if (File.Exists(screenshotDir + "\\" + carfile.patchfile + imgCar.file)) {
+                        imageBox.Image = Image.FromFile(screenshotDir + "\\" + carfile.patchfile + imgCar.file);
 
-                    Graphics imageBoximg = Graphics.FromImage(imageBox.Image);
-                    Pen pen = new Pen(Color.Red, 5);
-                    imageBoximg.DrawRectangle(pen, (imgCar.x - imgCar.width / 2), (imgCar.y - imgCar.height / 2), imgCar.width, imgCar.height);
-                    imageBoximg.DrawEllipse(pen, imgCar.x, imgCar.y, 5, 5);
+                        Graphics imageBoximg = Graphics.FromImage(imageBox.Image);
+                        Pen pen = new Pen(Color.Red, 5);
+                        imageBoximg.DrawRectangle(pen, (imgCar.x - imgCar.width / 2), (imgCar.y - imgCar.height / 2), imgCar.width, imgCar.height);
+                        imageBoximg.DrawEllipse(pen, imgCar.x, imgCar.y, 5, 5);
 
-                    var color = Color.LightGray;
+                        var color = Color.LightGray;
 
-                    ChannelNameZone channelZones = (ChannelNameZone)channel[carfile.channelId];
+                        ChannelNameZone channelZones = (ChannelNameZone)channel[carfile.channelId];
 
-                    for (Int16 indexZone = 0; indexZone < channelZones.count; indexZone++)
-                    {
-                        if (channelZones.zones[indexZone].type == 0) { color = Color.Green; } // Зона поиска встречного движения
-                        if (channelZones.zones[indexZone].type == 2) { color = Color.SkyBlue; } // Зона до стоп-линии
-                        if (channelZones.zones[indexZone].type == 3) { color = Color.Blue; } // Зона после стоп-линии
-                        if (channelZones.zones[indexZone].type == 4) { color = Color.Red; } // Зона проезда перекрестка на красный свет
-                        if (channelZones.zones[indexZone].type == 10) { color = Color.Pink; } // Зона распознавания номеров
+                        for (Int16 indexZone = 0; indexZone < channelZones.count; indexZone++)
+                        {
+                            if (channelZones.zones[indexZone].type == 0) { color = Color.Green; } // Зона поиска встречного движения
+                            if (channelZones.zones[indexZone].type == 2) { color = Color.SkyBlue; } // Зона до стоп-линии
+                            if (channelZones.zones[indexZone].type == 3) { color = Color.Blue; } // Зона после стоп-линии
+                            if (channelZones.zones[indexZone].type == 4) { color = Color.Red; } // Зона проезда перекрестка на красный свет
+                            if (channelZones.zones[indexZone].type == 10) { color = Color.Pink; } // Зона распознавания номеров
 
 
-                        Point point1 = new Point(channelZones.zones[indexZone].x1, channelZones.zones[indexZone].y1);
-                        Point point2 = new Point(channelZones.zones[indexZone].x2, channelZones.zones[indexZone].y2);
-                        Point point3 = new Point(channelZones.zones[indexZone].x3, channelZones.zones[indexZone].y3);
-                        Point point4 = new Point(channelZones.zones[indexZone].x4, channelZones.zones[indexZone].y4);
-                        Point[] curvePoints = { point1, point2, point3, point4 };
-                        pen = new Pen(color, 2);
-                        SolidBrush brush = new SolidBrush(Color.FromArgb(50, color));
-                        imageBoximg.FillPolygon(brush, curvePoints);
-                        imageBoximg.DrawPolygon(pen, curvePoints);
+                            Point point1 = new Point(channelZones.zones[indexZone].x1, channelZones.zones[indexZone].y1);
+                            Point point2 = new Point(channelZones.zones[indexZone].x2, channelZones.zones[indexZone].y2);
+                            Point point3 = new Point(channelZones.zones[indexZone].x3, channelZones.zones[indexZone].y3);
+                            Point point4 = new Point(channelZones.zones[indexZone].x4, channelZones.zones[indexZone].y4);
+                            Point[] curvePoints = { point1, point2, point3, point4 };
+                            pen = new Pen(color, 2);
+                            SolidBrush brush = new SolidBrush(Color.FromArgb(50, color));
+                            imageBoximg.FillPolygon(brush, curvePoints);
+                            imageBoximg.DrawPolygon(pen, curvePoints);
+                        }
+                        imageBoximg.Dispose();
+                        imageBox.Refresh();
                     }
-                    imageBoximg.Dispose();
-                    imageBox.Refresh();
+                    else
+                    {
+                        MessageBox.Show($"In Data.xml \n {screenshotDir + "\\" + carfile.patchfile + imgCar.file} \n\nthere is a link to the file, but there is no file itself.", "No file", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    }
                 }
             }
         }
@@ -290,7 +296,7 @@ namespace ViewingZones
                             {
                                 Carfile carfile = new Carfile();
                                 ChannelNameZone channelName = (ChannelNameZone)channel[reader.GetString(1)];
-                                datetime = DateTime.FromFileTime(reader.GetInt64(0)).ToString() + " --- " + channelName.channelName;
+                                datetime = DateTime.FromFileTime(reader.GetInt64(0)).ToString() + " - " + channelName.channelName;
                                 carfile.channelId = reader.GetString(1);
                                 carfile.patchfile = reader.GetString(2).Remove(reader.GetString(2).LastIndexOf("\\") + 1);
                                 carsBox.Items.Add(datetime);
@@ -336,7 +342,7 @@ namespace ViewingZones
 
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
             {
-                imageBox.Image.Save(carsBox.SelectedItem.ToString().Replace(':', '.') + " --- " + numberBox.Text + " --- " + imagesBox.SelectedItem.ToString() + ".jpg", ImageFormat.Jpeg);
+                imageBox.Image.Save(carsBox.SelectedItem.ToString().Replace(':', '.') + " - " + numberBox.Text + " - " + imagesBox.SelectedItem.ToString() + ".jpg", ImageFormat.Jpeg);
             }
 
         }
@@ -350,7 +356,7 @@ namespace ViewingZones
 
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
             {
-                string fileName = carsBox.SelectedItem.ToString().Replace(':', '.') + " --- " + numberBox.Text + " --- ";
+                string fileName = carsBox.SelectedItem.ToString().Replace(':', '.') + " - " + numberBox.Text + " - ";
                 Carfile carfile = (Carfile)cars[carsBox.SelectedItem.ToString()];
                 ICollection keys = imageNames.Keys;
                 foreach (String key in keys)
