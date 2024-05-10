@@ -130,6 +130,8 @@
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.imageBox.BackColor = System.Drawing.SystemColors.ControlDark;
+            this.imageBox.Image = ((System.Drawing.Image)(resources.GetObject("imageBox.Image")));
+            this.imageBox.InitialImage = null;
             this.imageBox.Location = new System.Drawing.Point(10, 87);
             this.imageBox.Name = "imageBox";
             this.imageBox.Size = new System.Drawing.Size(1280, 720);

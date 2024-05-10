@@ -297,6 +297,10 @@ namespace ViewingZones
                                 cars.Add(datetime, carfile);
                             }
                         }
+                        else
+                        {
+                            MessageBox.Show($"There are no driveways with number {numberBox.Text} in the database.", "Number not found", MessageBoxButtons.OK, MessageBoxIcon.Asterisk);
+                        }
                     }
                 }
             }
