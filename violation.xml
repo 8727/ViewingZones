@@ -1,0 +1,31 @@
+    <Images>
+      <Image Name="VideoDetection.Vehicle" Source="VideoDetection/ObjectDetection" Text="транспортное средство" />
+      <Image Name="VideoDetection.Number" Source="VideoDetection/NumberDetection" Text="номер" />
+      <Image Name="VideoDetection.Frame" Source="VideoDetection/ObjectImage" Text="транспортное средство" />
+      
+      <Image Name="VideoDetection.ObjectBeginImage" Source="VideoDetection/ObjectBeginImage" Text="VideoDetectionObjectBeginImage" />
+      <Image Name="VideoDetection.ObjectEndImage" Source="VideoDetection/ObjectEndImage" Text="VideoDetectionObjectEndImage" />
+      
+      <Image Name="VideoDetection.ObjectStopLineImage" Source="VideoDetection/ObjectStopLineImage" Text="VideoDetectionObjectStopLineImage" />
+      <Image Name="Speeding.ViewPoint" Source="Speeding/View" Text="SpeedingViewPoint" />
+      
+      <Image Name="WrongWay.DetectionBeginning" Source="WrongWay/Episodes/Episode/DetectionBeginning" Text="WrongWayDetectionBeginning" />
+      <Image Name="WrongWay.DetectionEnd" Source="WrongWay/Episodes/Episode/DetectionEnd" Text="WrongWayDetectionEnd" />
+      
+      <Image Name="RedLightBeforeLine.DetectionBeginning" Source="RedLightBeforeLine/Episodes/Episode/DetectionBeginning" UseFilter="true" Text="RedLightBeforeLineDetectionBeginning" />
+      <Image Name="RedLightAfterLine.DetectionBeginning" Source="RedLightAfterLine/Episodes/Episode/DetectionBeginning" Text="RedLightAfterLineDetectionBeginning" />
+      <Image Name="RedLightAfterLine.DetectionEnd" Source="RedLightAfterLine/Episodes/Episode/DetectionEnd" UseFilter="true" Text="RedLightAfterLineDetectionEnd" />
+      <Image Name="RedLightAfterLine.RedLightState" Source="RedLightAfterLine/Episodes/Episode/RedLightState" Text="Начало горения красного сигнала светофора" />
+      
+      <Image Name="RedLightBeforeLineLeft.DetectionBeginning" Source="RedLightBeforeLineLeft/Episodes/Episode/DetectionBeginning" Text="RedLightBeforeLineLeftDetectionBeginning" />
+      <Image Name="RedLightBeforeLineRight.DetectionBeginning" Source="RedLightBeforeLineRight/Episodes/Episode/DetectionBeginning" Text="RedLightAfterLineRightViewPointDetectionEnd" />
+      
+      <Image Name="RedLightCross.DetectionBeginning" Source="RedLightCross/Episodes/Episode/DetectionBeginning" Text="RedLightCrossDetectionBeginning" />
+      <Image Name="RedLightCross.DetectionEnd" Source="RedLightCross/Episodes/Episode/DetectionEnd" Text="RedLightCrossDetectionEnd" />
+      
+      <Image Name="WrongCross.DetectionBeginning" Source="WrongCross/Episodes/Episode/DetectionBeginning" Text="WrongCrossDetectionBeginning" />
+      <Image Name="WrongCross.DetectionEnd" Source="WrongCross/Episodes/Episode/DetectionEnd" Text="WrongCrossDetectionEnd" />
+      
+      <Image Name="PedestrianPrior2" Source="BeforeZebraWithPedestrian/Episodes/Episode/RedLightState" Text="Frame, zebra_cross, before_stop_line, 2," />
+      <Image Name="PedestrianPrior4" Source="AfterZebraWithPedestrian/Episodes/Episode/DetectionEnd" Text="Frame, zebra_cross, after_stop_line, 4," />
+    </Images>

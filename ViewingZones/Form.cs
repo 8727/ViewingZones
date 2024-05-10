@@ -67,10 +67,10 @@ namespace ViewingZones
 
         void HashImagesNames()
         {
-            imageNames.Add("DetectionBeginning", "Detection Beginning");
-            imageNames.Add("ObjectImage", "Object Image");
-            imageNames.Add("ObjectBeginImage", "Object Begin Image");
-            imageNames.Add("ObjectEndImage", "Object End Image");
+            imageNames.Add("ObjectBeginImage", "Video Detection Object Begin");
+            imageNames.Add("ObjectEndImage", "Video Detection Object End");
+            imageNames.Add("ObjectStopLineImage", "Video Detection Object Stop Line");
+
 
         }
 
