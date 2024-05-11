@@ -67,11 +67,28 @@ namespace ViewingZones
 
         void HashImagesNames()
         {
-            imageNames.Add("ObjectBeginImage", "Video Detection Object Begin");
-            imageNames.Add("ObjectEndImage", "Video Detection Object End");
-            imageNames.Add("ObjectStopLineImage", "Video Detection Object Stop Line");
+            imageNames.Add("VideoDetection/ObjectBeginImage", "Video Begin"); // первая фиксация
+            imageNames.Add("VideoDetection/ObjectEndImage", "Video End");     // последняя фиксация
 
+            imageNames.Add("WrongWay/Episodes/Episode/DetectionBeginning", "Wrong Way Begin");
+            imageNames.Add("WrongWay/Episodes/Episode/DetectionEnd", "Wrong Way End");
 
+            imageNames.Add("VideoDetection/ObjectStopLineImage", "Stop Line");
+            imageNames.Add("RedLightBeforeLine/Episodes/Episode/DetectionBeginning", "Red Light Before Line");
+            imageNames.Add("RedLightAfterLine/Episodes/Episode/DetectionBeginning", "RedLightAfterLine Begin");
+            imageNames.Add("RedLightAfterLine/Episodes/Episode/DetectionEnd", "Red Light After Line End");
+
+            imageNames.Add("RedLightBeforeLineLeft/Episodes/Episode/DetectionBeginning", "Red Light Before Line Left Begin");
+            imageNames.Add("RedLightBeforeLineRight/Episodes/Episode/DetectionBeginning", "Red Light Before Line Right Begin");
+
+            imageNames.Add("RedLightCross/Episodes/Episode/DetectionBeginning", "Red Light Cross Begin");
+            imageNames.Add("RedLightCross/Episodes/Episode/DetectionEnd", "Red Light Cross End");
+
+            imageNames.Add("WrongCross/Episodes/Episode/DetectionBeginning", "Wrong Cross Begin");
+            imageNames.Add("WrongCross/Episodes/Episode/DetectionEnd", "Wrong Cross End");
+
+            imageNames.Add("BeforeZebraWithPedestrian/Episodes/Episode/RedLightState", "Zebra Begin");
+            imageNames.Add("AfterZebraWithPedestrian/Episodes/Episode/DetectionEnd", "Zebra End");
         }
 
         void Ui_Load(object sender, EventArgs e)
@@ -229,32 +246,26 @@ namespace ViewingZones
                     ICollection keys = imageNames.Keys;
                     foreach (String nameImages in keys)
                     {
-                        XmlNodeList nodeList = dataXmlFile.GetElementsByTagName(nameImages);
+                        XmlNodeList nodeList = dataXmlFile.SelectNodes($"//{nameImages}");
                         if (nodeList != null)
                         {
                             CarFilePoint imagesXml = new CarFilePoint();
                             foreach (XmlNode xnode in nodeList)
                             {
-                                bool Flags = false;
                                 foreach (XmlNode vavueNode in xnode.ChildNodes)
                                 {
-
-                                    if (vavueNode.Name == "Description" & vavueNode.InnerText != "") { Flags = true; }
-                                    if (vavueNode.Name == "Type" & vavueNode.InnerText == "selected_registration_number") { Flags = true; }
-                                    if (Flags == true)
-                                    {
-                                        if (vavueNode.Name == "Image") { imagesXml.file = vavueNode.InnerText; }
-                                        if (vavueNode.Name == "X") { imagesXml.x = Int16.Parse(vavueNode.InnerText); }
-                                        if (vavueNode.Name == "Y") { imagesXml.y = Int16.Parse(vavueNode.InnerText); }
-                                        if (vavueNode.Name == "Width") { imagesXml.width = Int16.Parse(vavueNode.InnerText); }
-                                        if (vavueNode.Name == "Height") { imagesXml.height = Int16.Parse(vavueNode.InnerText); }
-                                    }
+                                    if (vavueNode.Name == "Image") { imagesXml.file = vavueNode.InnerText; }
+                                    if (vavueNode.Name == "X") { imagesXml.x = Int16.Parse(vavueNode.InnerText); }
+                                    if (vavueNode.Name == "Y") { imagesXml.y = Int16.Parse(vavueNode.InnerText); }
+                                    if (vavueNode.Name == "Width") { imagesXml.width = Int16.Parse(vavueNode.InnerText); }
+                                    if (vavueNode.Name == "Height") { imagesXml.height = Int16.Parse(vavueNode.InnerText); }
                                 }
-                            }
-                            if (imagesXml.file != "")
-                            {
-                                imagesBox.Items.Add(imageNames[nameImages]);
-                                imagesCar.Add(imageNames[nameImages], imagesXml);
+
+                                if (imagesXml.file != "" || imagesXml.file == null)
+                                {
+                                    imagesBox.Items.Add(imageNames[nameImages]);
+                                    imagesCar.Add(imageNames[nameImages], imagesXml);
+                                }
                             }
                         }
                     }
