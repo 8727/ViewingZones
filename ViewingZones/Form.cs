@@ -75,7 +75,7 @@ namespace ViewingZones
 
             imageNames.Add("VideoDetection/ObjectStopLineImage", "Stop Line");
             imageNames.Add("RedLightBeforeLine/Episodes/Episode/DetectionBeginning", "Red Light Before Line");
-            imageNames.Add("RedLightAfterLine/Episodes/Episode/DetectionBeginning", "RedLightAfterLine Begin");
+            imageNames.Add("RedLightAfterLine/Episodes/Episode/DetectionBeginning", "Red Light After Line Begin");
             imageNames.Add("RedLightAfterLine/Episodes/Episode/DetectionEnd", "Red Light After Line End");
 
             imageNames.Add("RedLightBeforeLineLeft/Episodes/Episode/DetectionBeginning", "Red Light Before Line Left Begin");
@@ -376,10 +376,11 @@ namespace ViewingZones
             {
                 string fileName = carsBox.SelectedItem.ToString().Replace(':', '.') + " - " + numberBox.Text + " - ";
                 Carfile carfile = (Carfile)cars[carsBox.SelectedItem.ToString()];
-                ICollection keys = imageNames.Keys;
+                ICollection keys = imagesCar.Keys;
                 foreach (String key in keys)
                 {
-                    CarFilePoint imgCar = (CarFilePoint)imagesCar[imageNames[key]];
+                    label1.Text = key;
+                    CarFilePoint imgCar = (CarFilePoint)imagesCar[key];
                     if (imgCar.file != "")
                     {
                         imageBox.Image = Image.FromFile(screenshotDir + "\\" + carfile.patchfile + imgCar.file);
@@ -415,7 +416,7 @@ namespace ViewingZones
                         imageBoximg.Dispose();
                         imageBox.Refresh();
                     }
-                    imageBox.Image.Save(fileName + imageNames[key] + ".jpg", ImageFormat.Jpeg);
+                    imageBox.Image.Save(fileName + key + ".jpg", ImageFormat.Jpeg);
                 }
             }
         }
