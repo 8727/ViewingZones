@@ -379,7 +379,6 @@ namespace ViewingZones
                 ICollection keys = imagesCar.Keys;
                 foreach (String key in keys)
                 {
-                    label1.Text = key;
                     CarFilePoint imgCar = (CarFilePoint)imagesCar[key];
                     if (imgCar.file != "")
                     {
