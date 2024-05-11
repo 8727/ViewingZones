@@ -100,7 +100,7 @@
             this.numberBox.Name = "numberBox";
             this.numberBox.Size = new System.Drawing.Size(195, 38);
             this.numberBox.TabIndex = 0;
-            this.numberBox.Text = "В300ЕА19";
+            this.numberBox.Text = "*001аА%";
             this.numberBox.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             // 
             // carsBox
