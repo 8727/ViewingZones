@@ -100,7 +100,7 @@ namespace ViewingZones
             if (regex.IsMatch(name))
             {
                 int number = (int.Parse(name.Remove(name.IndexOf("-"))) + 1);
-                name = number.ToString("0") + name.Substring(4);
+                name = number.ToString("0") + name.Substring(1);
             }
             else
             {
