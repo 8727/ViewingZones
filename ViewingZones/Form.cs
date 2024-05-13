@@ -30,10 +30,19 @@ namespace ViewingZones
             public Int16 height;
         }
 
+        class CarTrackPoint
+        {
+            public Int16 x;
+            public Int16 y;
+            //public Int16 width;
+            //public Int16 height;
+        }
+
         class Carfile
         {
             public string channelId;
             public string patchfile;
+            public CarTrackPoint[] point { get; set; } = new CarTrackPoint[200];
         }
 
         class ChannelZone
@@ -96,15 +105,15 @@ namespace ViewingZones
 
         string NameCreation(string name)
         {
-            Regex regex = new Regex(@"-\d{1}");
+            Regex regex = new Regex(@"-\d{1}$");
             if (regex.IsMatch(name))
             {
-                int number = (int.Parse(name.Remove(name.IndexOf("-"))) + 1);
-                name = number.ToString("0") + name.Substring(1);
+                int number = (int.Parse(name.Substring(name.IndexOf("-") + 1))) + 1;
+                name = name.Remove(name.LastIndexOf("-") + 1) + number.ToString("0");
             }
             else
             {
-                name = "-0" + name;
+                name = name + "-2";
             }
 
             if (imagesCar.ContainsKey(name))
@@ -216,7 +225,25 @@ namespace ViewingZones
                         Graphics imageBoximg = Graphics.FromImage(imageBox.Image);
                         Pen pen = new Pen(Color.Red, 5);
                         imageBoximg.DrawRectangle(pen, (imgCar.x - imgCar.width / 2), (imgCar.y - imgCar.height / 2), imgCar.width, imgCar.height);
-                        imageBoximg.DrawEllipse(pen, imgCar.x, imgCar.y, 5, 5);
+                        imageBoximg.DrawRectangle(pen, imgCar.x, imgCar.y, 5, 5);
+
+                        for (Int16 indexPoints = 0; indexPoints < carfile.point.Length; indexPoints++)
+                        {
+                            if (carfile.point[indexPoints] != null)
+                            {
+                                if (carfile.point[indexPoints].x != 0 & carfile.point[indexPoints].y != 0)
+                                { 
+                                    imageBoximg.DrawEllipse(pen, carfile.point[indexPoints].x - 10, carfile.point[indexPoints].y - 10, 20, 20);
+                                    if (indexPoints > 0)
+                                    {
+                                        if (carfile.point[indexPoints - 1].x != 0 & carfile.point[indexPoints - 1].y != 0)
+                                        {
+                                            imageBoximg.DrawLine(pen, carfile.point[indexPoints - 1].x, carfile.point[indexPoints - 1].y, carfile.point[indexPoints].x, carfile.point[indexPoints].y);
+                                        }
+                                    }
+                                }
+                            }
+                        }
 
                         var color = Color.LightGray;
 
@@ -286,12 +313,47 @@ namespace ViewingZones
 
                                 if (imagesXml.file != "" || imagesXml.file == null)
                                 {
-                                    imagesBox.Items.Add(imageNames[nameImages]);
-                                    imagesCar.Add(imageNames[nameImages], imagesXml);
+                                    string names = (string)imageNames[nameImages];
+                                    if (imagesCar.ContainsKey(names))
+                                    {
+                                        names = NameCreation(names);
+                                    }
+                                    imagesBox.Items.Add(names);
+                                    imagesCar.Add(names, imagesXml);
                                 }
                             }
                         }
                     }
+
+                    XmlNodeList statusPoints = dataXmlFile.GetElementsByTagName($"Interpolated");
+                    string xmlPoint = null;
+                    if (statusPoints[0].InnerText == "true" | statusPoints[0].InnerText == "True")
+                    {
+                        xmlPoint = $"//TrackPoints/TrackPoint/NumberArea";
+                    }
+                    else
+                    {
+                        xmlPoint = $"//TrackPoints/TrackPoint/RecognitionNumber";
+                    }
+
+                    XmlNodeList nodePoints = dataXmlFile.SelectNodes(xmlPoint);
+                    if (nodePoints != null)
+                    {
+                        int indexPoint = 0;
+                        foreach (XmlNode xnode in nodePoints)
+                        {
+                            CarTrackPoint trackPoint = new CarTrackPoint();
+                            foreach (XmlNode vavueNode in xnode.ChildNodes)
+                            {
+                                if (vavueNode.Name == "X") { trackPoint.x = Int16.Parse(vavueNode.InnerText); }
+                                if (vavueNode.Name == "Y") { trackPoint.y = Int16.Parse(vavueNode.InnerText); }
+                                //if (vavueNode.Name == "Width") { trackPoint.width = Int16.Parse(vavueNode.InnerText); }
+                                //if (vavueNode.Name == "Height") { trackPoint.height = Int16.Parse(vavueNode.InnerText); }
+                            }
+                            carfile.point[indexPoint++] = trackPoint;
+                        }
+                    }
+
                     if (imagesBox.Items.Count > 0)
                     {
                         imagesBox.SelectedIndex = 0;
@@ -321,7 +383,7 @@ namespace ViewingZones
 
             if (File.Exists(installDir + @"Database\vtvehicledb.sqlite"))
             {
-                string sqlcar = $"SELECT CHECKTIME, CHANNEL_ID, SCREENSHOT FROM CARS WHERE GRNNUMBER LIKE \"{numberBox.Text.Replace('*', '_').ToUpper()}\"";
+                string sqlcar = $"SELECT CHECKTIME, CHANNEL_ID, SCREENSHOT FROM CARS WHERE FULLGRNNUMBER LIKE \"{numberBox.Text.Replace('*', '_').ToUpper()}\"";
 
                 using (var connection = new SQLiteConnection($@"URI=file:{installDir}Database\vtvehicledb.sqlite"))
                 {
@@ -411,6 +473,24 @@ namespace ViewingZones
                         Pen pen = new Pen(Color.Red, 5);
                         imageBoximg.DrawRectangle(pen, (imgCar.x - imgCar.width / 2), (imgCar.y - imgCar.height / 2), imgCar.width, imgCar.height);
                         imageBoximg.DrawEllipse(pen, imgCar.x, imgCar.y, 5, 5);
+
+                        for (Int16 indexPoints = 0; indexPoints < carfile.point.Length; indexPoints++)
+                        {
+                            if (carfile.point[indexPoints] != null)
+                            {
+                                if (carfile.point[indexPoints].x != 0 & carfile.point[indexPoints].y != 0)
+                                {
+                                    imageBoximg.DrawEllipse(pen, carfile.point[indexPoints].x - 10, carfile.point[indexPoints].y - 10, 20, 20);
+                                    if (indexPoints > 0)
+                                    {
+                                        if (carfile.point[indexPoints - 1].x != 0 & carfile.point[indexPoints - 1].y != 0)
+                                        {
+                                            imageBoximg.DrawLine(pen, carfile.point[indexPoints - 1].x, carfile.point[indexPoints - 1].y, carfile.point[indexPoints].x, carfile.point[indexPoints].y);
+                                        }
+                                    }
+                                }
+                            }
+                        }
 
                         var color = Color.LightGray;
 
