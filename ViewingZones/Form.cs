@@ -8,6 +8,7 @@ using System.IO;
 using System.Xml;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Diagnostics;
 
 namespace ViewingZones
 {
@@ -426,6 +427,15 @@ namespace ViewingZones
             { 
                 //search_Click(search, null);
                 search.PerformClick();  
+            }
+        }
+
+        private void imageBox_Click(object sender, EventArgs e)
+        {
+            if (carsBox.Items.Count > 0)
+            {
+                Carfile carfile = (Carfile)cars[carsBox.SelectedItem.ToString()];
+                Process.Start("explorer.exe", screenshotDir + "\\" + carfile.patchfile);
             }
         }
     }
