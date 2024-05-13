@@ -96,18 +96,18 @@ namespace ViewingZones
 
         string NameCreation(string name)
         {
-            Regex regex = new Regex(@"\d{4}-");
+            Regex regex = new Regex(@"-\d{1}");
             if (regex.IsMatch(name))
             {
                 int number = (int.Parse(name.Remove(name.IndexOf("-"))) + 1);
-                name = number.ToString("0000") + name.Substring(4);
+                name = number.ToString("0") + name.Substring(4);
             }
             else
             {
-                name = "0000-" + name;
+                name = "-0" + name;
             }
 
-            if (ListFiles.ContainsKey(name))
+            if (imagesCar.ContainsKey(name))
             {
                 name = NameCreation(name);
             }
