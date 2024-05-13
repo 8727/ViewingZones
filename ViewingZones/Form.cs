@@ -9,6 +9,7 @@ using System.Xml;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 
 namespace ViewingZones
 {
@@ -69,6 +70,7 @@ namespace ViewingZones
         void HashImagesNames()
         {
             imageNames.Add("VideoDetection/ObjectBeginImage", "Video Begin"); // первая фиксация
+            imageNames.Add("VideoDetection/ObjectImage", "Video Best"); // первая фиксация
             imageNames.Add("VideoDetection/ObjectEndImage", "Video End");     // последняя фиксация
 
             imageNames.Add("WrongWay/Episodes/Episode/DetectionBeginning", "Wrong Way Begin");
@@ -90,6 +92,26 @@ namespace ViewingZones
 
             imageNames.Add("BeforeZebraWithPedestrian/Episodes/Episode/RedLightState", "Zebra Begin");
             imageNames.Add("AfterZebraWithPedestrian/Episodes/Episode/DetectionEnd", "Zebra End");
+        }
+
+        string NameCreation(string name)
+        {
+            Regex regex = new Regex(@"\d{4}-");
+            if (regex.IsMatch(name))
+            {
+                int number = (int.Parse(name.Remove(name.IndexOf("-"))) + 1);
+                name = number.ToString("0000") + name.Substring(4);
+            }
+            else
+            {
+                name = "0000-" + name;
+            }
+
+            if (ListFiles.ContainsKey(name))
+            {
+                name = NameCreation(name);
+            }
+            return name;
         }
 
         void Ui_Load(object sender, EventArgs e)
