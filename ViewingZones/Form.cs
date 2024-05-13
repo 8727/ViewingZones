@@ -326,34 +326,36 @@ namespace ViewingZones
                     }
 
                     XmlNodeList statusPoints = dataXmlFile.GetElementsByTagName($"Interpolated");
-                    string xmlPoint = null;
-                    if (statusPoints[0].InnerText == "true" | statusPoints[0].InnerText == "True")
+                    if (statusPoints.Count > 0)
                     {
-                        xmlPoint = $"//TrackPoints/TrackPoint/NumberArea";
-                    }
-                    else
-                    {
-                        xmlPoint = $"//TrackPoints/TrackPoint/RecognitionNumber";
-                    }
-
-                    XmlNodeList nodePoints = dataXmlFile.SelectNodes(xmlPoint);
-                    if (nodePoints != null)
-                    {
-                        int indexPoint = 0;
-                        foreach (XmlNode xnode in nodePoints)
+                        string xmlPoint = null;
+                        if (statusPoints[0].InnerText == "true" | statusPoints[0].InnerText == "True")
                         {
-                            CarTrackPoint trackPoint = new CarTrackPoint();
-                            foreach (XmlNode vavueNode in xnode.ChildNodes)
+                            xmlPoint = $"//TrackPoints/TrackPoint/NumberArea";
+                        }
+                        else
+                        {
+                            xmlPoint = $"//TrackPoints/TrackPoint/RecognitionNumber";
+                        }
+
+                        XmlNodeList nodePoints = dataXmlFile.SelectNodes(xmlPoint);
+                        if (nodePoints != null)
+                        {
+                            int indexPoint = 0;
+                            foreach (XmlNode xnode in nodePoints)
                             {
-                                if (vavueNode.Name == "X") { trackPoint.x = Int16.Parse(vavueNode.InnerText); }
-                                if (vavueNode.Name == "Y") { trackPoint.y = Int16.Parse(vavueNode.InnerText); }
-                                //if (vavueNode.Name == "Width") { trackPoint.width = Int16.Parse(vavueNode.InnerText); }
-                                //if (vavueNode.Name == "Height") { trackPoint.height = Int16.Parse(vavueNode.InnerText); }
+                                CarTrackPoint trackPoint = new CarTrackPoint();
+                                foreach (XmlNode vavueNode in xnode.ChildNodes)
+                                {
+                                    if (vavueNode.Name == "X") { trackPoint.x = Int16.Parse(vavueNode.InnerText); }
+                                    if (vavueNode.Name == "Y") { trackPoint.y = Int16.Parse(vavueNode.InnerText); }
+                                    //if (vavueNode.Name == "Width") { trackPoint.width = Int16.Parse(vavueNode.InnerText); }
+                                    //if (vavueNode.Name == "Height") { trackPoint.height = Int16.Parse(vavueNode.InnerText); }
+                                }
+                                carfile.point[indexPoint++] = trackPoint;
                             }
-                            carfile.point[indexPoint++] = trackPoint;
                         }
                     }
-
                     if (imagesBox.Items.Count > 0)
                     {
                         imagesBox.SelectedIndex = 0;
@@ -541,5 +543,5 @@ namespace ViewingZones
             }
         }
     }
-    //relase
+    //Releases v0.3
 }
