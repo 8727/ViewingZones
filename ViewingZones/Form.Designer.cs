@@ -139,7 +139,7 @@
             this.imageBox.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.imageBox.TabIndex = 5;
             this.imageBox.TabStop = false;
-            this.imageBox.Click += new System.EventHandler(this.imageBox_Click);
+            this.imageBox.DoubleClick += new System.EventHandler(this.imageBox_Click);
             // 
             // save
             // 

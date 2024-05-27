@@ -447,7 +447,7 @@ namespace ViewingZones
 
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
             {
-                imageBox.Image.Save(carsBox.SelectedItem.ToString().Replace(':', '.') + " - " + numberBox.Text + " - " + imagesBox.SelectedItem.ToString() + ".jpg", ImageFormat.Jpeg);
+                imageBox.Image.Save(dialog.FileName + "\\" + carsBox.SelectedItem.ToString().Replace(':', '.') + " - " + numberBox.Text.Replace('*', '.') + " - " + imagesBox.SelectedItem.ToString() + ".jpg", ImageFormat.Jpeg);
             }
 
         }
@@ -461,7 +461,7 @@ namespace ViewingZones
 
             if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
             {
-                string fileName = carsBox.SelectedItem.ToString().Replace(':', '.') + " - " + numberBox.Text + " - ";
+                string fileName = carsBox.SelectedItem.ToString().Replace(':', '.') + " - " + numberBox.Text.Replace('*', '.') + " - ";
                 Carfile carfile = (Carfile)cars[carsBox.SelectedItem.ToString()];
                 ICollection keys = imagesCar.Keys;
                 foreach (String key in keys)
@@ -520,7 +520,7 @@ namespace ViewingZones
                         imageBoximg.Dispose();
                         imageBox.Refresh();
                     }
-                    imageBox.Image.Save(fileName + key + ".jpg", ImageFormat.Jpeg);
+                    imageBox.Image.Save(dialog.FileName + "\\" + fileName + key + ".jpg", ImageFormat.Jpeg);
                 }
             }
         }
